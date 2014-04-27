@@ -412,16 +412,13 @@ MonoBehaviour:
   worldSizeX: 32
   worldSizeY: 64
   backgroundTile: {fileID: 100000, guid: 51337d7631a3d444f830a71e700ef1e7, type: 2}
-  backgroundTopTile: {fileID: 100000, guid: a544378e2d82d4c4094b34ab9e4a225a, type: 2}
-  walkableTile: {fileID: 100000, guid: 79a2937be52577642a25afa8373acac6, type: 2}
   walkableGrassTile: {fileID: 100000, guid: 4f3b23008be55d448bddedc359fc355c, type: 2}
   foregroudTile: {fileID: 100000, guid: f660255d7c935604ea96a1d23f79c940, type: 2}
   wallTile: {fileID: 100000, guid: 34d9640ae70833b42a56fc205cb9597f, type: 2}
   waterTile: {fileID: 100000, guid: 742a65c29e2779045b8d5289c37d4f66, type: 2}
-  period: 2
   audioClip:
   - {fileID: 8300000, guid: b48efb19f0b2b7549af7b523ef331c6e, type: 3}
-  gameState: 0
+  - {fileID: 8300000, guid: c55e62b5671cc1042819859cf4b3736b, type: 3}
 --- !u!4 &2033181660
 Transform:
   m_ObjectHideFlags: 0

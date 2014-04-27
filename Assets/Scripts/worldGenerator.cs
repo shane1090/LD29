@@ -9,8 +9,6 @@ public class worldGenerator : MonoBehaviour
 	private int[] tileMap;
 
 	public GameObject backgroundTile;
-	public GameObject backgroundTopTile;
-	public GameObject walkableTile;
 	public GameObject walkableGrassTile;
 	public GameObject foregroudTile;
 	public GameObject wallTile;
@@ -29,8 +27,9 @@ public class worldGenerator : MonoBehaviour
 	private Transform player;
 
 	private int waterLevel = 0;
-	private float nextWaterUpdate = 10.0f;
-	public float period = 2.0f;
+	private float nextWaterUpdate = 4.0f;
+	private float period = 1.0f;
+	private float timer = 0.0f;
 
 	public AudioClip[] audioClip;
 
@@ -79,7 +78,7 @@ public class worldGenerator : MonoBehaviour
 				if (previousY == 0)
 					Instantiate(walkableGrassTile, pos, Quaternion.identity);
 				else
-					Instantiate(walkableTile, pos, Quaternion.identity);
+					Instantiate(foregroudTile, pos, Quaternion.identity);
 
 				tileMap[tilesPlaced] = 2;
 			}
@@ -89,10 +88,7 @@ public class worldGenerator : MonoBehaviour
 		pos.z = 2f;
 		
 		// Blank tile - display background
-		if (previousY == 0)
-			Instantiate(backgroundTopTile, pos, Quaternion.identity);
-		else
-			Instantiate(backgroundTile, pos, Quaternion.identity);
+		Instantiate(backgroundTile, pos, Quaternion.identity);
 
 		previousX = previousX + 1;
 
@@ -142,14 +138,17 @@ public class worldGenerator : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		timer += Time.deltaTime;
+
 		if (Input.GetKeyDown(KeyCode.R))
 			RestartLevel ();
 
 		if (waterLevel < worldSizeY)
 		{
-			if (Time.time > nextWaterUpdate)
+			if (timer > nextWaterUpdate)
 			{
-				nextWaterUpdate += period;
+				timer = 0.0f;
+				nextWaterUpdate = period;
 				waterLevel++;
 
 				previousX = -1;
@@ -169,6 +168,11 @@ public class worldGenerator : MonoBehaviour
 				RestartLevel ();
 			}
 		}
+
+		if (player.position.y > 1)
+		{
+			Application.LoadLevel("Main Menu");
+		}
 	}
 
 	void RestartLevel ()
@@ -177,7 +181,7 @@ public class worldGenerator : MonoBehaviour
 		previousX = 0;
 		previousY = 0;
 		waterLevel = 0;
-		nextWaterUpdate += 10.0f;
+		nextWaterUpdate = 4.0f;
 
 		// Destory all Tiles
 		GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tile");
