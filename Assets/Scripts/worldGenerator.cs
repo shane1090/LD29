@@ -141,7 +141,7 @@ public class worldGenerator : MonoBehaviour
 	void Update () 
 	{
 		if (Input.GetKeyDown(KeyCode.R))
-			RegenerateLevel ();
+			RestartLevel ();
 
 		if (waterLevel < worldSizeY)
 		{
@@ -160,23 +160,36 @@ public class worldGenerator : MonoBehaviour
 					previousX = previousX + 1;
 				}
 			}
+
+			if ((-worldSizeY + (waterLevel - 1)) > player.position.y)
+			{
+				Debug.Log("Game Over");
+				RestartLevel ();
+			}
 		}
 	}
 
-	void RegenerateLevel ()
+	void RestartLevel ()
 	{
 		tilesPlaced = 0;
 		previousX = 0;
 		previousY = 0;
+		waterLevel = 0;
+		nextWaterUpdate += 10.0f;
 
-		GameObject[] objects = GameObject.FindGameObjectsWithTag("Tile");
-		foreach (GameObject go in objects)
+		// Destory all Tiles
+		GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tile");
+		foreach (GameObject go in tiles)
+		{
+			Destroy(go);
+		}
+		// Destory all Tiles
+		GameObject[] tilesMineable = GameObject.FindGameObjectsWithTag("TileMineable");
+		foreach (GameObject go in tilesMineable)
 		{
 			Destroy(go);
 		}
 
 		GenerateLevel ();
-
-		player.position = new Vector3(1, 1, -1);
 	}
 }
