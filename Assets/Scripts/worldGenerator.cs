@@ -32,6 +32,8 @@ public class worldGenerator : MonoBehaviour
 	private float nextWaterUpdate = 10.0f;
 	public float period = 2.0f;
 
+	public AudioClip[] audioClip;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -56,7 +58,7 @@ public class worldGenerator : MonoBehaviour
 
 	void PlaceTile ()
 	{
-		Vector3 pos = new Vector3((previousX - (worldSizeX / 2)), previousY, -3f);
+		Vector3 pos = new Vector3((previousX - (worldSizeX / 2)), previousY, 0f);
 
 		tempRandom = Random.Range(0,2);
 
@@ -163,7 +165,7 @@ public class worldGenerator : MonoBehaviour
 
 			if ((-worldSizeY + (waterLevel - 1)) > player.position.y)
 			{
-				Debug.Log("Game Over");
+				PlaySound(0);
 				RestartLevel ();
 			}
 		}
@@ -191,5 +193,11 @@ public class worldGenerator : MonoBehaviour
 		}
 
 		GenerateLevel ();
+	}
+
+	void PlaySound(int clip)
+	{
+		audio.clip = audioClip[clip];
+		audio.Play();
 	}
 }

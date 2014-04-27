@@ -14,6 +14,8 @@ public class playerController : MonoBehaviour
 	float groundRadius = 0.2f;
 	public LayerMask whatIsGround;
 
+	public AudioClip[] audioClip;
+
 	void Start () 
 	{
 		anim = GetComponent<Animator>();
@@ -23,6 +25,8 @@ public class playerController : MonoBehaviour
 	void FixedUpdate () 
 	{
 		grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+		anim.SetBool("Ground", grounded);
+		anim.SetFloat("vSpeed", rigidbody2D.velocity.y);
 
 		float move = Input.GetAxis("Horizontal");
 		anim.SetFloat("Speed", Mathf.Abs (move));
@@ -37,13 +41,15 @@ public class playerController : MonoBehaviour
 
 	void Update ()
 	{
-		if (grounded && Input.GetKeyDown(KeyCode.Space))
+		if (grounded && Input.GetButtonDown("Jump"))
 		{
+			PlaySound(0);
 			rigidbody2D.AddForce(new Vector2(0, jumpForce));
 		}
 
-		if (Input.GetKeyDown(KeyCode.Z))
+		if (Input.GetButtonDown("Mine"))
 		{
+			anim.SetTrigger("Digging");
 			Vector2 rayDirection = new Vector2(0,0);
 
 			if (!facingRight)
@@ -53,15 +59,22 @@ public class playerController : MonoBehaviour
 
 			Debug.DrawRay (transform.position, rayDirection * 0.5f, Color.green);
 
-			RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, 0.5f, whatIsGround, -3, -3);
+			RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection, 0.5f, whatIsGround, 0, 0);
 			if (hit != null && hit.transform != null)
 			{
 				if (hit.collider.gameObject.tag == "TileMineable")
 				{
+					PlaySound(1);
 					hit.collider.gameObject.SendMessage( "ReduceHealth" );
 				}
 			}
 		}
+	}
+
+	void PlaySound(int clip)
+	{
+		audio.clip = audioClip[clip];
+		audio.Play();
 	}
 
 	void Flip ()

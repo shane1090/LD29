@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileHealth: 100
+  damagedTile: {fileID: 21300000, guid: 989f3c6af2b269f4598ff473e660c3ec, type: 3}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
