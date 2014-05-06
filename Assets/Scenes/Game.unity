@@ -87,6 +87,7 @@ GameObject:
   - 124: {fileID: 195825916}
   - 81: {fileID: 195825915}
   - 114: {fileID: 195825920}
+  - 114: {fileID: 195825921}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -168,6 +169,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxXandY: {x: 8.5, y: 10}
   minXandY: {x: -9.5, y: -59.5}
+--- !u!114 &195825921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195825914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dfa12a07eaf1a54a901fb1b90f638cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomLevel: 1
 --- !u!1 &465540898
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,6 +424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldSizeX: 32
   worldSizeY: 64
+  tileSize: 64
   backgroundTile: {fileID: 100000, guid: 51337d7631a3d444f830a71e700ef1e7, type: 2}
   walkableGrassTile: {fileID: 100000, guid: 4f3b23008be55d448bddedc359fc355c, type: 2}
   foregroudTile: {fileID: 100000, guid: f660255d7c935604ea96a1d23f79c940, type: 2}

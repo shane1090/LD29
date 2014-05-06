@@ -5,6 +5,7 @@ public class worldGenerator : MonoBehaviour
 {
 	public int worldSizeX = 16;
 	public int worldSizeY = 16;
+	public int tileSize = 64;
 
 	private int[] tileMap;
 
@@ -18,11 +19,6 @@ public class worldGenerator : MonoBehaviour
 	private int tilesPlaced = 0;
 	private int previousX = 0;
 	private int previousY = 0;
-
-	private int realWorldX;
-	private int realWorldY;
-
-	private int tempRandom;
 
 	private Transform player;
 
@@ -44,58 +40,72 @@ public class worldGenerator : MonoBehaviour
 	void GenerateLevel ()
 	{
 		tileMap = new int[totalTiles];
-		
-		for (tilesPlaced = 0; tilesPlaced < totalTiles; tilesPlaced++)
-		{
-			PlaceTile ();
-		}
 
-		PlaceWalls ();
+		CreateTileMap ();
+		PlaceTiles ();
+		//PlaceWalls ();
 
 		player.position = new Vector3(0, -(worldSizeY - 1), -1);
 	}
 
-	void PlaceTile ()
+	/// <summary>
+	/// Creates the tile map.
+	/// </summary>
+	void CreateTileMap ()
 	{
-		Vector3 pos = new Vector3((previousX - (worldSizeX / 2)), previousY, 0f);
+		// Tile map definition
+		// 0 = empty tile
+		// 1 = standard ground tile
+		// 2 = grass ground tile
 
-		tempRandom = Random.Range(0,2);
-
-		if (tempRandom == 0)
+		// Loop for initial tile placement
+		for (tilesPlaced = 0; tilesPlaced < totalTiles; tilesPlaced++)
 		{
-			tileMap[tilesPlaced] = 0;
-		}
+			// Generate random number that indicates whether the tile is ground
+			// 0 = empty space
+			// 1 = ground tile
+			int tileType = Random.Range(0,2);
 
-		if (tempRandom == 1 && tilesPlaced < (totalTiles - worldSizeX)) // Assign a foreground tile
-		{
-			if (tilesPlaced > worldSizeX && tileMap[tilesPlaced - (worldSizeX+1)] != 0)
+			if (tileType == 1 && tilesPlaced < worldSizeX) // Check if the ground tile should be grassy (top line of tiles)
 			{
-				Instantiate(foregroudTile, pos, Quaternion.identity);
-				tileMap[tilesPlaced] = 3;
+				tileType = 2;
 			}
-			else
+
+			// Insert tile into tileMap
+			tileMap[tilesPlaced] = tileType;
+		}
+	}
+
+	void PlaceTiles ()
+	{
+		foreach (int value in tileMap)
+		{
+			Vector3 pos = new Vector3((previousX - ((worldSizeX * tileSize) / 2)), previousY, 0f);
+
+			switch (value)
 			{
-				if (previousY == 0)
-					Instantiate(walkableGrassTile, pos, Quaternion.identity);
-				else
+				case 1:
 					Instantiate(foregroudTile, pos, Quaternion.identity);
-
-				tileMap[tilesPlaced] = 2;
+					break;
+				case 2:
+					Instantiate(walkableGrassTile, pos, Quaternion.identity);
+					break;
 			}
-		}
 
-		// Place background tile
-		pos.z = 2f;
-		
-		// Blank tile - display background
-		Instantiate(backgroundTile, pos, Quaternion.identity);
+			// Place background tile
+			pos.z = 2f;
 
-		previousX = previousX + 1;
+			// Blank tile - display background
+			Instantiate(backgroundTile, pos, Quaternion.identity);
+			
+			previousX = previousX + tileSize;
+			
+			if (previousX > ((worldSizeX * tileSize) / 2))
+			{
+				previousY = previousY - tileSize;
+				previousX = 0;
+			}
 
-		if (previousX > (worldSizeX - 1))
-		{
-			previousY = previousY - 1;
-			previousX = 0;
 		}
 	}
 
